@@ -1,0 +1,22 @@
+# lightrag - thư viện chính để xây dựng hệ thống RAG (truy xuất và tạo câu trả lời thông minh)
+lightrag
+# neo4j - kết nối với cơ sở dữ liệu đồ thị Neo4j để lưu trữ mối quan hệ giữa các thông tin
+neo4j
+# sentence-transformers - chuyển đổi văn bản thành vector số để máy tính hiểu được nghĩa
+sentence-transformers
+# openai - gọi các mô hình AI của OpenAI như ChatGPT để tạo câu trả lời
+openai
+# python-dotenv - đọc các thông tin bí mật từ file .env (như API key, mật khẩu)
+python-dotenv
+# pytest - công cụ để kiểm tra xem code có hoạt động đúng không
+pytest
+# fastapi - tạo website/API để người dùng có thể gọi các chức năng qua internet
+fastapi
+# uvicorn[standard] - máy chủ web để chạy ứng dụng FastAPI
+uvicorn[standard]
+# requests - gửi yêu cầu HTTP đến các website/API khác
+requests
+# nest_asyncio - cho phép chạy nhiều tác vụ đồng thời trong môi trường tương tác
+nest_asyncio
+# faiss-cpu - tìm kiếm nhanh các văn bản tương tự dựa trên vector (chạy trên CPU)
+faiss-cpu
