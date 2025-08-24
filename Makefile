@@ -56,19 +56,15 @@ install:
 
 setup: install
 	@echo "$(GREEN)🔧 Setting up project...$(NC)"
-	@mkdir -p data logs docker/volumes/rag_storage docker/volumes/neo4j_data docker/volumes/neo4j_logs
-	@if [ ! -f .env ]; then \
-		echo "$(YELLOW)📝 Creating .env file...$(NC)"; \
-		cp .env.example .env 2>/dev/null || echo "# Copy this to .env and configure\nOPENAI_API_KEY=your_key_here\nNEO4J_URI=bolt://neo4j:7687\nNEO4J_USERNAME=neo4j\nNEO4J_PASSWORD=your_password" > .env; \
-	fi
+	@python -c "import os; dirs=['data','logs','docker/volumes/rag_storage','docker/volumes/neo4j_data','docker/volumes/neo4j_logs']; [os.makedirs(d, exist_ok=True) for d in dirs]"
+	@python -c "import os; open('.env', 'w').write('# Copy this to .env and configure\\nOPENAI_API_KEY=your_key_here\\nNEO4J_URI=bolt://neo4j:7687\\nNEO4J_USERNAME=neo4j\\nNEO4J_PASSWORD=your_password\\n') if not os.path.exists('.env') else None"
 	@echo "$(GREEN)✅ Setup complete! Edit the .env file with your API keys.$(NC)"
 
 clean:
 	@echo "$(GREEN)🧹 Cleaning up...$(NC)"
-	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-	find . -type f -name "*.pyc" -delete 2>/dev/null || true
-	find . -type f -name "*.pyo" -delete 2>/dev/null || true
-	find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
+	@python -c "import os, shutil; [shutil.rmtree(root, ignore_errors=True) for root, dirs, files in os.walk('.') for d in dirs if d == '__pycache__']"
+	@python -c "import os; [os.remove(os.path.join(root, f)) for root, dirs, files in os.walk('.') for f in files if f.endswith(('.pyc', '.pyo'))]"
+	@python -c "import os, shutil; [shutil.rmtree(root, ignore_errors=True) for root, dirs, files in os.walk('.') for d in dirs if d.endswith('.egg-info')]"
 	@echo "$(GREEN)✅ Cleanup complete!$(NC)"
 
 # 🐳 Docker Commands
@@ -82,7 +78,7 @@ up:
 	@make _create_volumes
 	docker-compose -f $(DOCKER_COMPOSE_FILE) up -d
 	@echo "$(YELLOW)⏳ Waiting for services to be ready...$(NC)"
-	@sleep 30
+	@python -c "import time; time.sleep(30)"
 	@make status
 	@echo ""
 	@echo "$(GREEN)✅ Services are running!$(NC)"
@@ -98,7 +94,7 @@ down:
 restart:
 	@echo "$(GREEN)🔄 Restarting services...$(NC)"
 	docker-compose -f $(DOCKER_COMPOSE_FILE) restart
-	@sleep 15
+	@python -c "import time; time.sleep(15)"
 	@make status
 	@echo "$(GREEN)✅ Services restarted!$(NC)"
 
@@ -133,16 +129,14 @@ reindex:
 
 backup:
 	@echo "$(GREEN)💾 Creating backup...$(NC)"
-	@mkdir -p backups
-	@BACKUP_NAME=backup_$(shell date +%Y%m%d_%H%M%S); \
-	echo "Creating backup: $$BACKUP_NAME"; \
-	cp -r docker/volumes/rag_storage "backups/$$BACKUP_NAME" 2>/dev/null || echo "$(YELLOW)⚠️  RAG storage not found$(NC)"; \
-	docker exec lightrag_neo4j cypher-shell -u neo4j -p your_password "CALL apoc.export.cypher.all('/var/lib/neo4j/import/$$BACKUP_NAME.cypher')" 2>/dev/null || echo "$(YELLOW)⚠️  Neo4j backup failed$(NC)"; \
-	echo "$(GREEN)✅ Backup created: $$BACKUP_NAME$(NC)"
+	@python -c "import os; os.makedirs('backups', exist_ok=True)"
+	@python -c "import os, shutil, datetime; backup_name=f'backup_{datetime.datetime.now().strftime(\"%Y%m%d_%H%M%S\")}'; print(f'Creating backup: {backup_name}'); shutil.copytree('docker/volumes/rag_storage', f'backups/{backup_name}', ignore_errors=True) if os.path.exists('docker/volumes/rag_storage') else print('⚠️  RAG storage not found')"
+	@docker exec lightrag_neo4j cypher-shell -u neo4j -p your_password "CALL apoc.export.cypher.all('/var/lib/neo4j/import/backup.cypher')" 2>/dev/null || echo "$(YELLOW)⚠️  Neo4j backup failed$(NC)"
+	@echo "$(GREEN)✅ Backup created!$(NC)"
 
 restore:
 	@echo "$(GREEN)🔄 Available backups:$(NC)"
-	@ls backups/ 2>/dev/null || echo "$(YELLOW)No backups found$(NC)"
+	@python -c "import os; print('\\n'.join(os.listdir('backups'))) if os.path.exists('backups') else print('$(YELLOW)No backups found$(NC)')"
 	@echo "$(YELLOW)To restore, copy backup files manually to docker/volumes/$(NC)"
 
 # 🔍 Monitoring
@@ -163,7 +157,9 @@ neo4j-browser:
 
 # 🔧 Internal helpers
 _create_volumes:
-	@mkdir -p docker/volumes/rag_storage docker/volumes/neo4j_data docker/volumes/neo4j_logs docker/volumes/neo4j_import docker/volumes/neo4j_plugins docker/logs
+	@echo "$(YELLOW)Creating required directories...$(NC)"
+	@python -c "import os; dirs=['docker/volumes/rag_storage','docker/volumes/neo4j_data','docker/volumes/neo4j_logs','docker/volumes/neo4j_import','docker/volumes/neo4j_plugins','docker/logs']; [os.makedirs(d, exist_ok=True) for d in dirs]"
+	@echo "$(GREEN)Directories ensured.$(NC)"
 
 # 🚀 Quick commands
 start: up
