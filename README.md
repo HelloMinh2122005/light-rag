@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![LightRAG Logo](https://via.placeholder.com/400x100/1e40af/ffffff?text=LightRAG)
+![LightRAG Logo](https://github.com/HKUDS/LightRAG/blob/main/README.assets/b2aaf634151b4706892693ffb43d9093.png?raw=true)
 
 **Hệ thống trả lời câu hỏi thông minh dựa trên tài liệu với Knowledge Graph**
 
@@ -56,7 +56,7 @@ LightRAG là một hệ thống **RAG (Retrieval-Augmented Generation)** hiện 
 
 ```bash
 # 1. Clone repository
-git clone <your-repo-url>
+git clone https://github.com/HelloMinh2122005/light-rag.git
 cd light_rag
 
 # 2. Setup dự án (tạo .env, thư mục cần thiết)
