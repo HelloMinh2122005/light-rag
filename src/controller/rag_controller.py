@@ -3,6 +3,7 @@ Controller Layer - Xử lý HTTP requests và responses
 Chứa các endpoint API và logic điều khiển luồng xử lý
 """
 
+import os
 from fastapi import HTTPException
 from service.rag_service import RAGService
 from dto.QueryRequest import QueryRequest
@@ -16,7 +17,10 @@ class RAGController:
     Tách biệt logic điều khiển với logic nghiệp vụ
     """
     
-    def __init__(self, data_path: str = "../../data/data.txt"):
+    def __init__(self, data_path: str = None):
+        # Use environment variable or default path that works in Docker
+        if data_path is None:
+            data_path = os.getenv("DATA_PATH", "/app/data/data.txt")
         self.rag_service = RAGService(data_path)
         LogUtil.log_info("RAG Controller initialized", "CONTROLLER")
 

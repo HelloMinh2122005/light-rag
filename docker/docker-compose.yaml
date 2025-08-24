@@ -1,5 +1,5 @@
-# Docker Compose version 3.8 - hỗ trợ đầy đủ các tính năng hiện đại
-version: '3.8'
+# Docker Compose configuration - LightRAG Services
+# Note: version field is deprecated and not needed in newer Docker Compose
 
 services:
   # Service chính chạy LightRAG API

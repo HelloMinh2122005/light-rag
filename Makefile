@@ -37,6 +37,7 @@ help:
 	@echo "  make test             - Run tests"
 	@echo "  make test-api         - Test API endpoints"
 	@echo "  make lint             - Check code quality"
+	@echo "  make shell            - Access container shell"
 	@echo ""
 	@echo "$(YELLOW)📊 Data Management:$(NC)"
 	@echo "  make reindex          - Reindex data"
@@ -121,11 +122,15 @@ lint:
 	@echo "$(GREEN)🔍 Checking code quality...$(NC)"
 	python -m flake8 src/ --count --select=E9,F63,F7,F82 --show-source --statistics || echo "$(YELLOW)flake8 not installed. Run: pip install flake8$(NC)"
 
+# 🐚 Access container shell for debugging
+shell:
+	@echo "$(GREEN)🐚 Accessing container shell...$(NC)"
+	docker exec -it docker-lightrag-api-1 bash || docker exec -it docker-lightrag-api-1 sh
+
 # 📊 Data Management
 reindex:
 	@echo "$(GREEN)🔄 Reindexing data...$(NC)"
-	curl -X POST http://localhost:8000/reindex || echo "$(RED)❌ Failed to reindex. Make sure the API is running.$(NC)"
-	@echo "$(GREEN)✅ Reindex complete!$(NC)"
+	@powershell -Command "try { Invoke-RestMethod -Uri 'http://localhost:8000/reindex' -Method Post; Write-Host '$(GREEN)✅ Reindex complete!$(NC)' } catch { Write-Host '$(RED)❌ Failed to reindex. Make sure the API is running.$(NC)' }"
 
 backup:
 	@echo "$(GREEN)💾 Creating backup...$(NC)"
@@ -146,14 +151,14 @@ status:
 
 health:
 	@echo "$(GREEN)❤️  Checking API health...$(NC)"
-	@curl -s http://localhost:8000/health | python -m json.tool 2>/dev/null || echo "$(RED)❌ API not responding$(NC)"
+	@powershell -Command "try { $$response = Invoke-RestMethod -Uri 'http://localhost:8000/health' -Method Get; $$response | ConvertTo-Json -Depth 10 } catch { Write-Host '$(RED)❌ API not responding$(NC)' }"
 
 neo4j-browser:
 	@echo "$(GREEN)🗃️  Opening Neo4j Browser...$(NC)"
 	@echo "URL: http://localhost:7474"
 	@echo "Username: neo4j"
 	@echo "Password: your_password"
-	@python -m webbrowser http://localhost:7474 2>/dev/null || echo "$(YELLOW)Please open http://localhost:7474 manually$(NC)"
+	@powershell -Command "Start-Process 'http://localhost:7474'" 2>$$null || echo "$(YELLOW)Please open http://localhost:7474 manually$(NC)"
 
 # 🔧 Internal helpers
 _create_volumes:

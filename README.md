@@ -48,9 +48,10 @@ LightRAG là một hệ thống **RAG (Retrieval-Augmented Generation)** hiện 
 
 ### 📋 Yêu cầu hệ thống
 
-- **Docker** và **Docker Compose**
-- **Make** (có sẵn trên Linux/macOS, Windows cần cài thêm)
+- **Docker** và **Docker Compose** (v2.0+)
+- **Make** (có sẵn trên Linux/macOS, Windows có thể dùng PowerShell)
 - **OpenAI API Key**
+- **Windows**: PowerShell 5.1+ (khuyến nghị) hoặc Git Bash
 
 ### ⚡ Cài đặt nhanh (5 phút)
 
@@ -186,12 +187,14 @@ Sau khi start thành công, bạn có thể truy cập:
 | **API Docs** | http://localhost:8000/docs | Swagger documentation |
 | **Health Check** | http://localhost:8000/health | Kiểm tra sức khỏe |
 | **Neo4j Browser** | http://localhost:7474 | Giao diện quản lý graph |
+| **Reindex** | http://localhost:8000/reindex | Đánh chỉ mục lại dữ liệu |
 
 ### 📡 Sử dụng API
 
 #### Gửi câu hỏi:
 
 ```bash
+# Sử dụng curl (Linux/macOS/Git Bash)
 curl -X POST "http://localhost:8000/query" \
      -H "Content-Type: application/json" \
      -d '{
@@ -199,12 +202,38 @@ curl -X POST "http://localhost:8000/query" \
        "mode": "hybrid",
        "top_k": 5
      }'
+
+# Hoặc sử dụng PowerShell (Windows)
+$body = @{
+    question = "Napoleon là ai?"
+    mode = "hybrid"
+    top_k = 5
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://localhost:8000/query" -Method Post -Body $body -ContentType "application/json"
+```
+
+#### Health Check:
+
+```bash
+# curl
+curl http://localhost:8000/health
+
+# PowerShell
+Invoke-RestMethod -Uri "http://localhost:8000/health"
 ```
 
 #### Đánh chỉ mục lại:
 
 ```bash
+# curl
 curl -X POST "http://localhost:8000/reindex"
+
+# PowerShell
+Invoke-RestMethod -Uri "http://localhost:8000/reindex" -Method Post
+
+# Hoặc sử dụng make command
+make reindex
 ```
 
 ### 🎨 Các chế độ tìm kiếm
@@ -224,13 +253,16 @@ curl -X POST "http://localhost:8000/reindex"
 netstat -tulpn | grep 8000  # Linux
 netstat -ano | findstr 8000  # Windows
 
-# Hoặc thay đổi port trong docker-compose.yaml
+# Stop services và restart
+make down
+make up
 ```
 
 #### 2. **"OpenAI API key not found"**
 ```bash
 # Kiểm tra .env file
-cat .env
+type .env  # Windows
+cat .env   # Linux/macOS
 # Đảm bảo có: OPENAI_API_KEY=sk-...
 ```
 
@@ -244,10 +276,12 @@ docker logs lightrag_neo4j
 make restart
 ```
 
-#### 4. **"Out of memory"**
+#### 4. **"Docker Compose version warning"**
 ```bash
-# Tăng memory cho Docker (Docker Desktop -> Settings -> Resources)
-# Hoặc giảm chunk_token_size trong src/ingestion.py
+# Warning này đã được fix trong phiên bản mới
+# Nếu vẫn gặp, cập nhật Docker Compose:
+# Windows: Docker Desktop -> Update
+# Linux: sudo apt update && sudo apt install docker-compose-plugin
 ```
 
 ### 🔍 Debug commands
@@ -259,12 +293,23 @@ make logs
 # Kiểm tra containers
 make status
 
-# Test health
+# Test health (Windows compatible)
 make health
 
 # Vào container để debug
-docker exec -it lightrag_api bash
+make shell
+
+# Test API endpoints
+make test-api
 ```
+
+### 🪟 Windows Users
+
+Dự án đã được tối ưu hóa cho Windows:
+- ✅ PowerShell commands thay vì curl
+- ✅ Tương thích với Docker Desktop  
+- ✅ Makefile hoạt động native trên Windows
+- ✅ Không cần WSL hay Git Bash
 
 ## 📁 Cấu trúc dự án
 

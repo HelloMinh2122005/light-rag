@@ -1,5 +1,5 @@
 # lightrag - thư viện chính để xây dựng hệ thống RAG (truy xuất và tạo câu trả lời thông minh)
-lightrag
+lightrag-hku
 # neo4j - kết nối với cơ sở dữ liệu đồ thị Neo4j để lưu trữ mối quan hệ giữa các thông tin
 neo4j
 # sentence-transformers - chuyển đổi văn bản thành vector số để máy tính hiểu được nghĩa
