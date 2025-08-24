@@ -20,7 +20,7 @@ LightRAG là một hệ thống **RAG (Retrieval-Augmented Generation)** hiện 
 
 ### ✨ Tính năng chính
 
-- 🧠 **Trí tuệ nhân tạo**: Sử dụng OpenAI GPT-4 để trả lời câu hỏi
+- 🧠 **Trí tuệ nhân tạo**: Sử dụng OpenAI GPT-4o-mini để trả lời câu hỏi
 - 🕸️ **Knowledge Graph**: Neo4j lưu trữ mối quan hệ giữa các khái niệm
 - 🔍 **Vector Search**: Tìm kiếm semantic với Faiss
 - 🏗️ **Kiến trúc MVC**: Code được tổ chức chuẩn, dễ maintain
@@ -128,8 +128,6 @@ make logs           # 📝 Xem logs realtime
 
 ```bash
 make dev            # 💻 Chạy development mode (local)
-make test           # 🧪 Chạy tests
-make lint           # 🔍 Check code quality
 ```
 
 ### 📊 Data Management
