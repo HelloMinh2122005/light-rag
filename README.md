@@ -90,7 +90,7 @@ NEO4J_USERNAME=neo4j
 NEO4J_PASSWORD=your_password
 
 # 📂 Application Config
-DATA_PATH=/app/data/napoleon.txt
+DATA_PATH=/app/data/data.txt
 RAG_STORAGE_PATH=/app/rag_storage
 ```
 
@@ -100,7 +100,7 @@ RAG_STORAGE_PATH=/app/rag_storage
 
 ```bash
 data/
-└── napoleon.txt    # File tài liệu chính (thay bằng file của bạn)
+└── data.txt    # File tài liệu chính (thay bằng file của bạn)
 ```
 
 ## 🛠️ Lệnh Make cơ bản
@@ -275,7 +275,7 @@ light_rag/
 ├── 📋 requirements.txt       # Python dependencies
 ├── ⚙️  .env                  # Cấu hình (tạo từ setup)
 ├── 📂 data/                  # Dữ liệu đầu vào
-│   └── napoleon.txt
+│   └── data.txt
 ├── 🐳 docker/                # Docker configs  
 │   ├── Dockerfile
 │   └── docker-compose.yaml

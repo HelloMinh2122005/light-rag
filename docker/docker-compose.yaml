@@ -17,7 +17,7 @@ services:
     environment:
       - PYTHONPATH=/app/src       # Đường dẫn Python modules
       - PYTHONUNBUFFERED=1        # Hiển thị logs real-time
-      - DATA_PATH=/app/data/napoleon.txt  # File dữ liệu chính
+      - DATA_PATH=/app/data/data.txt  # File dữ liệu chính
       # Neo4j connection settings
       - NEO4J_URI=bolt://neo4j:7687      # URI kết nối Neo4j (tên service trong docker)
       - NEO4J_USERNAME=neo4j              # Username Neo4j
@@ -25,7 +25,7 @@ services:
     
     # Mount volumes để chia sẻ dữ liệu giữa host và container
     volumes:
-      # Mount thư mục data (read-only) - chứa file napoleon.txt
+      # Mount thư mục data (read-only) - chứa file data.txt
       - ../data:/app/data:ro
       
       # Mount persistent storage cho RAG indexes và embeddings

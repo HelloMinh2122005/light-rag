@@ -43,7 +43,7 @@ ENV PYTHONUNBUFFERED=1
 # WORKING_DIR: Thư mục làm việc chính
 ENV WORKING_DIR=/app
 # DATA_PATH: Đường dẫn file dữ liệu mặc định
-ENV DATA_PATH=/app/data/napoleon.txt
+ENV DATA_PATH=/app/data/data.txt
 
 # Health check để kiểm tra container có hoạt động không
 # Kiểm tra mỗi 30s, timeout 10s, thử lại 3 lần, chờ 40s ban đầu
