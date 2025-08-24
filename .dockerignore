@@ -67,6 +67,10 @@ Dockerfile*
 docker-compose*.yml
 docker-compose*.yaml
 
+# Docker volumes và logs (mounted từ host)
+docker/volumes/
+docker/logs/
+
 # Documentation
 *.md
 docs/

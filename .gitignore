@@ -1,2 +1,6 @@
 .env
 .vscode/
+
+# Docker volumes and logs (generated at runtime)
+docker/volumes/
+docker/logs/
