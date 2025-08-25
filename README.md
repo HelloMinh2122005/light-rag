@@ -241,7 +241,7 @@ make reindex
 - **`naive`**: Tìm kiếm vector đơn giản, nhanh nhất
 - **`local`**: Tìm kiếm cục bộ, cân bằng tốc độ/chất lượng  
 - **`global`**: Tìm kiếm toàn cục, chậm nhưng đầy đủ nhất
-- **`hybrid`**: Kết hợp vector + graph, **được khuyến nghị**
+- **`mix`**: Kết hợp vector + graph, **được khuyến nghị**
 
 ## 🔧 Troubleshooting
 

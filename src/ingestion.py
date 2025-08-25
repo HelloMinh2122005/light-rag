@@ -1,6 +1,8 @@
 import os
 
 import nest_asyncio
+from lightrag.llm.openai import gpt_4o_mini_complete, openai_embed
+from lightrag.kg.shared_storage import initialize_share_data, initialize_pipeline_status
 from dotenv import load_dotenv
 
 from lightrag import LightRAG, QueryParam
@@ -15,16 +17,20 @@ load_dotenv()
 async def initialize_rag(working_dir: str = "./rag_storage") -> LightRAG:
     # Bước 1: Khởi tạo LightRAG với cấu hình cơ bản
     rag = LightRAG(
-        working_dir=working_dir,           # Thư mục lưu dữ liệu
-        # For lightrag-hku, we'll use default OpenAI functions
-        llm_model_name="gpt-4o-mini",      # Tên model ChatGPT
-        embedding_model_name="text-embedding-3-large", # Model embedding
-        chunk_token_size=1500,             # Chia văn bản thành đoạn 1500 từ
-        chunk_overlap_token_size=300       # Chồng lấn 300 từ giữa các đoạn
+        working_dir=working_dir,
+        embedding_func=openai_embed,
+        llm_model_func=gpt_4o_mini_complete,
+        graph_storage="Neo4JStorage",
+        vector_storage="FaissVectorDBStorage",
+        chunk_token_size=1500,
+        chunk_overlap_token_size=300
     )
 
-    # Bước 2: Khởi tạo các kho lưu trữ (nếu cần)
-    # await rag.initialize_storages()
+    await rag.initialize_storages()
+
+    # ensure shared dicts exist
+    initialize_share_data()
+    await initialize_pipeline_status()
 
     return rag
 
