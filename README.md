@@ -377,7 +377,7 @@ Dự án này được phân phối dưới MIT License. Xem `LICENSE` file đ�
 - 📖 **Documentation**: Đọc tài liệu trong `src/ARCHITECTURE.md`
 - 🐛 **Bug Reports**: Tạo issue trên GitHub
 - 💬 **Questions**: Thảo luận trong Discussions
-- 📧 **Contact**: your-email@example.com
+- 📧 **Contact**: phandinhminh48@gmail.com
 
 ## 🙏 Cảm ơn
 
